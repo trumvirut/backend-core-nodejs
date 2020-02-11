@@ -1,0 +1,11 @@
+import { Min, IsInt, MaxLength, IsString } from 'class-validator';
+
+export default class {pascalName}Create {
+    @IsInt()
+    @Min(1)
+    code: number;
+
+    @IsString()
+    @MaxLength(50)
+    name: string;
+};

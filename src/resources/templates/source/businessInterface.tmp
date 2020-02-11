@@ -1,0 +1,22 @@
+import {pascalName}View from '../../models/{camelName}/{pascalName}View';
+import {pascalName}Create from '../../models/{camelName}/{pascalName}Create';
+import {pascalName}Update from '../../models/{camelName}/{pascalName}Update';
+import ResultList from '../../models/common/ResultList';
+
+interface I{pascalName}Business {
+    find{pascalName}s(keyword?: string, skip?: number, limit?: number): Promise<ResultList<{pascalName}View>>;
+
+    get{pascalName}(id: number): Promise<{pascalName}View | undefined>;
+
+    get{pascalName}ByCode(code: number): Promise<{pascalName}View | undefined>;
+
+    create{pascalName}(data: {pascalName}Create): Promise<{pascalName}View | undefined>;
+
+    update{pascalName}(id: number, data: {pascalName}Update): Promise<boolean>;
+
+    delete{pascalName}(id: number): Promise<boolean>;
+
+    initial{pascalName}s(data: {isRequired?: boolean, data: any}[], isRequired?: boolean): Promise<boolean>;
+}
+
+export default I{pascalName}Business;

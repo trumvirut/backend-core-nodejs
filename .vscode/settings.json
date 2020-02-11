@@ -1,0 +1,38 @@
+{
+    "search.exclude": {
+        "**/.nyc_output": true,
+        "**/.vscode": true,
+        "**/coverage": true,
+        "**/dist": true,
+        "**/node_modules": true,
+        "**/uploads": true,
+        "**/.history": true,
+        "**/.static": true,
+        "**/.tmp": true,
+        "**/.git": true
+    },
+    "editor.tabSize": 4,
+    "eslint.enable": true,
+    "eslint.options": {
+        "extensions": [
+            ".html",
+            ".js",
+            ".ts",
+            ".json",
+            ".css",
+            ".scss"
+        ]
+    },
+    "eslint.validate": [{
+        "language": "html",
+        "autoFix": true
+    }, {
+        "language": "javascript",
+        "autoFix": true
+    }, {
+        "language": "typescript",
+        "autoFix": true
+    }],
+    "eslint.run": "onSave",
+    "eslint.autoFixOnSave": true
+}

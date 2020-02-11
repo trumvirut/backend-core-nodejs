@@ -1,0 +1,155 @@
+import { Container, Service } from 'typedi';
+import { Repository } from 'typeorm';
+import { Validator } from 'class-validator';
+import { InjectRepository } from 'typeorm-typedi-extensions';
+import I{pascalName}Business from './interfaces/I{pascalName}Business'; // eslint-disable-line
+import {pascalName} from '../entities/{pascalName}';
+import {pascalName}View from '../models/{camelName}/{pascalName}View';
+import {pascalName}Create from '../models/{camelName}/{pascalName}Create';
+import {pascalName}Update from '../models/{camelName}/{pascalName}Update';
+import { CommonError } from '../models/common/Error';
+import ResultList from '../models/common/ResultList';
+import DataHelper from '../../helpers/DataHelper';
+const validator = Container.get(Validator);
+
+@Service()
+export default class {pascalName}Business implements I{pascalName}Business {
+    @InjectRepository({pascalName})
+    private {pascalName}Repository: Repository<{pascalName}>;
+
+    async find{pascalName}s(keyword?: string, skip?: number, limit?: number): Promise<ResultList<{pascalName}View>> {
+        const resultList = new ResultList<{pascalName}View>(skip, limit);
+
+        let query = this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .where('{camelName}.deletedAt IS NULL');
+
+        if (keyword && keyword.trim())
+            query = query.andWhere('{camelName}.name ilike :keyword', { keyword: `%${keyword.trim()}%` });
+
+        let [{camelName}s, count] = await query
+            .orderBy({
+                '{camelName}.name': 'ASC'
+            })
+            .skip(resultList.pagination.skip)
+            .take(resultList.pagination.limit)
+            .getManyAndCount();
+
+        resultList.results = {pascalName}View.parseArray({camelName}s);
+        resultList.pagination.total = count;
+        return resultList;
+    }
+
+    async get{pascalName}(id: number): Promise<{pascalName}View | undefined> {
+        DataHelper.validateId(id);
+
+        const {camelName} = await this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .whereInIds([id])
+            .andWhere('{camelName}.deletedAt IS NULL')
+            .getOne();
+
+        return {camelName} && new {pascalName}View({camelName});
+    }
+
+    async get{pascalName}ByCode(code: number): Promise<{pascalName}View | undefined> {
+        if (!code)
+            throw new CommonError(101, 'code');
+        if (!validator.isInt(code))
+            throw new CommonError(102, 'code');
+
+        const {camelName} = await this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .where('{camelName}.code = :code', { code })
+            .andWhere('{camelName}.deletedAt IS NULL')
+            .getOne();
+
+        return {camelName} && new {pascalName}View({camelName});
+    }
+
+    private async get{pascalName}ByName(name: string, excludeId?: number): Promise<{pascalName}View | undefined> {
+        if (!name)
+            throw new CommonError(101, 'name');
+
+        let query = this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .where('lower({camelName}.name) = :name', { name: name.trim().toLowerCase() })
+            .andWhere('{camelName}.deletedAt IS NULL');
+
+        if (excludeId)
+            query = query.andWhere('{camelName}.id != :id', { id: excludeId });
+
+        const {camelName} = await query.getOne();
+        return {camelName} && new {pascalName}View({camelName});
+    }
+
+    async create{pascalName}(data: {pascalName}Create): Promise<{pascalName}View | undefined> {
+        await DataHelper.validateDataModel(data);
+
+        if (await this.get{pascalName}ByCode(data.code))
+            throw new CommonError(105, 'code');
+
+        const {camelName}Exists = await this.get{pascalName}ByName(data.name);
+        if ({camelName}Exists)
+            throw new CommonError(105, 'name');
+
+        const result = await this.{pascalName}Repository.insert(data);
+
+        let {camelName};
+        if (result.raw && result.raw.length)
+            {camelName} = await this.get{pascalName}(result.raw[0].id);
+        return {camelName};
+    }
+
+    async update{pascalName}(id: number, data: {pascalName}Update): Promise<boolean> {
+        await DataHelper.validateModel(id, data);
+
+        const {camelName} = await this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .whereInIds([id])
+            .andWhere('{camelName}.deletedAt IS NULL')
+            .getOne();
+
+        if (!{camelName})
+            throw new CommonError(104, '{camelName}');
+
+        if (data.name) {
+            const {camelName}Exists = await this.get{pascalName}ByName(data.name, id);
+            if ({camelName}Exists)
+                throw new CommonError(105, 'name');
+        }
+
+        await this.{pascalName}Repository.update(id, data);
+        return true;
+    }
+
+    async delete{pascalName}(id: number): Promise<boolean> {
+        DataHelper.validateId(id);
+
+        const {camelName} = await this.{pascalName}Repository.createQueryBuilder('{camelName}')
+            .whereInIds([id])
+            .andWhere('{camelName}.deletedAt IS NULL')
+            .getOne();
+
+        if (!{camelName})
+            throw new CommonError(104, '{camelName}');
+
+        await this.{pascalName}Repository.update(id, { deletedAt: new Date() });
+        return true;
+    }
+
+    async initial{pascalName}s(list: {isRequired?: boolean, data: any}[], isRequired?: boolean): Promise<boolean> {
+        if (!list || !Array.isArray(list))
+            throw new CommonError();
+
+        for (let i = 0; i < list.length; i++) {
+            const item = list[i];
+            if (item.isRequired || isRequired) {
+                const {camelName} = await this.get{pascalName}ByCode(item.data.code);
+                if (!{camelName}) {
+                    const {camelName}Create = new {pascalName}Create();
+                    {camelName}Create.code = item.data.code;
+                    {camelName}Create.name = item.data.name;
+
+                    await this.create{pascalName}({camelName}Create);
+                }
+            }
+        }
+        return true;
+    }
+};

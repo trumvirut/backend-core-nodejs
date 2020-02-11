@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+    web-app:
+        container_name: ${PROJECT_ID}
+        build: .
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - ./uploads:/usr/app/uploads
+        networks:
+            - webnet
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '8m'
+                max-file: '10'
+        restart: always
+networks:
+    webnet:
+        name: webnet
+        driver: bridge

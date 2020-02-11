@@ -1,0 +1,7 @@
+**/.nuxt
+**/.vscode
+**/.nyc_output
+**/dist
+**/uploads
+**/coverage
+**/node_modules

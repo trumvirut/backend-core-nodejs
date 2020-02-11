@@ -1,0 +1,17 @@
+import {pascalName} from '../../entities/{pascalName}';
+
+export default class {pascalName}Reference {
+    id: number;
+    code: number;
+    name: string;
+
+    constructor(data: {pascalName}) {
+        this.id = data.id;
+        this.code = data.code;
+        this.name = data.name;
+    }
+
+    static parseArray(list: {pascalName}[]): {pascalName}Reference[] {
+        return list && Array.isArray(list) ? list.map(item => new {pascalName}Reference(item)) : [];
+    }
+};

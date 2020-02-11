@@ -1,0 +1,35 @@
+{
+    "check-coverage": false,
+    "lines": 80,
+    "watermarks": {
+      "lines": [80, 90],
+      "functions": [80, 90],
+      "branches": [80, 90],
+      "statements": [80, 90]
+    },
+    "exclude": [
+        "src/application/migrations",
+        "src/configuration",
+        "src/controllers",
+        "src/helpers",
+        "src/middlewares",
+        "src/resources",
+        "src/system",
+        "src/test",
+        "ormconfig.js"
+    ],
+    "extension": [
+        ".ts"
+    ],
+    "require": [
+        "ts-node/register"
+    ],
+    "reporter": [
+        "text",
+        "html"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "all": false,
+    "cache": false
+}

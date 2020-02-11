@@ -1,0 +1,295 @@
+import 'mocha';
+import { expect } from 'chai';
+import { Container } from 'typedi';
+import DataAccess from '../../application/dataAccess';
+import I{pascalName}Business from '../../application/businesses/interfaces/I{pascalName}Business';
+import {pascalName}Business from '../../application/businesses/{pascalName}Business';
+import {pascalName} from '../../application/entities/{pascalName}';
+import {pascalName}Create from '../../application/models/{camelName}/{pascalName}Create';
+import {pascalName}Update from '../../application/models/{camelName}/{pascalName}Update';
+import get{pascalName}s from '../../resources/data/initialization/{pascalName}';
+
+let {camelName}Business: I{pascalName}Business;
+
+const generate{pascalName}Data = () => {
+    const {camelName}Create = new {pascalName}Create();
+    {camelName}Create.code = 1;
+    {camelName}Create.name = '{pascalName} test';
+
+    return {camelName}Create;
+};
+
+describe('{pascalName} testing', () => {
+    before(() => {
+        await DataAccess.connection.synchronize(true);
+        {camelName}Business = Container.get({pascalName}Business);
+    });
+
+    beforeEach(async () => {
+        await DataAccess.connection.createQueryBuilder().delete().from({pascalName}).execute();
+    });
+
+    after(async () => {
+        await DataAccess.connection.synchronize(true);
+    });
+
+    it('Find {camelName}s without param', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const { results, pagination } = await {camelName}Business.find{pascalName}s('', 0, 1);
+            expect(Array.isArray(results) && results.length > 0 && pagination && pagination.total > 0).to.eq(true);
+        }
+    });
+
+    it('Find {camelName}s with name', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const { results, pagination } = await {camelName}Business.find{pascalName}s('{camelName}', 0, 1);
+            expect(Array.isArray(results) && results.length > 0 && pagination && pagination.total > 0).to.eq(true);
+        }
+    });
+
+    it('Get {camelName} by id without param', async () => {
+        await {camelName}Business.get{pascalName}(undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Get {camelName} by id invalid', async () => {
+        await {camelName}Business.get{pascalName}('1' as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Get {camelName} by id', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const result = await {camelName}Business.get{pascalName}({camelName}.id);
+            expect(!!result).to.eq(true);
+        }
+    });
+
+    it('Get {camelName} by code without param', async () => {
+        await {camelName}Business.get{pascalName}ByCode(undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Get {camelName} by code invalid', async () => {
+        await {camelName}Business.get{pascalName}ByCode('1' as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Get {camelName} by code', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const result = await {camelName}Business.get{pascalName}ByCode({camelName}.code);
+            expect(result && result.code === {camelName}.code).to.eq(true);
+        }
+    });
+
+    it('Create new {camelName} with data invalid', async () => {
+        await {camelName}Business.create{pascalName}(undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} without code', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        {camelName}Create.code = undefined as any;
+
+        await {camelName}Business.create{pascalName}({camelName}Create).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} with code invalid', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        {camelName}Create.code = 10;
+
+        await {camelName}Business.create{pascalName}({camelName}Create).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} without name', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        {camelName}Create.name = undefined as any;
+
+        await {camelName}Business.create{pascalName}({camelName}Create).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} with length name greater than 50 characters', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        {camelName}Create.name = 'This is the name with length greater than 50 characters!';
+
+        await {camelName}Business.create{pascalName}({camelName}Create).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} with code has exists', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        await {camelName}Business.create{pascalName}({camelName}Create);
+
+        const {camelName}Create2 = generate{pascalName}Data();
+        await {camelName}Business.create{pascalName}({camelName}Create2).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} with name has exists', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        await {camelName}Business.create{pascalName}({camelName}Create);
+        
+        const {camelName}Create2 = generate{pascalName}Data();
+        {camelName}Create2.code = 100;
+
+        await {camelName}Business.create{pascalName}({camelName}Create2).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Create new {camelName} successfully', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+        expect(!!{camelName}).to.eq(true);
+    });
+
+    it('Update {camelName} with data invalid', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            await {camelName}Business.update{pascalName}({camelName}.id, undefined as any).catch(error => {
+                expect(error.httpCode).to.eq(400);
+            });
+        }
+    });
+
+    it('Update {camelName} without id', async () => {
+        await {camelName}Business.update{pascalName}(undefined as any, undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Update {camelName} with id invalid', async () => {
+        await {camelName}Business.update{pascalName}('1' as any, undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Update {camelName} with id not exists', async () => {
+        const {camelName}Update = new {pascalName}Update();
+        {camelName}Update.name = '{pascalName} test';
+
+        await {camelName}Business.update{pascalName}(1000, {camelName}Update).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Update {camelName} with name invalid', async () => {
+        const {camelName}Update = new {pascalName}Update();
+        {camelName}Update.name = '';
+
+        await {camelName}Business.update{pascalName}(1, {camelName}Update).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Update {camelName} with length name greater than 50 characters', async () => {
+        const {camelName}Update = new {pascalName}Update();
+        {camelName}Update.name = 'This is the name with length greater than 50 characters!';
+
+        await {camelName}Business.update{pascalName}(1, {camelName}Update).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Update {camelName} with name has exists', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const {camelName}Create2 = generate{pascalName}Data();
+            {camelName}Create2.code = 2;
+            {camelName}Create2.name = '{pascalName} test 2';
+            const {camelName}2 = await {camelName}Business.create{pascalName}({camelName}Create2);
+
+            if ({camelName}2) {
+                const {camelName}Update = new {pascalName}Update();
+                {camelName}Update.name = {camelName}2.name;
+
+                await {camelName}Business.update{pascalName}({camelName}.id, {camelName}Update).catch(error => {
+                    expect(error.httpCode).to.eq(400);
+                });
+            }
+        }
+    });
+
+    it('Update {camelName} successfully', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const {camelName}Update = new {pascalName}Update();
+            {camelName}Update.name = '{pascalName} test updated';
+
+            const result = await {camelName}Business.update{pascalName}({camelName}.id, {camelName}Update);
+            if (result) {
+                const {camelName}Updated = await {camelName}Business.get{pascalName}({camelName}.id);
+                expect({camelName}Updated && {camelName}Updated.name === {camelName}Update.name).to.eq(true);
+            }
+        }
+    });
+
+    it('Delete {camelName} without id', async () => {
+        await {camelName}Business.delete{pascalName}(undefined as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Delete {camelName} with id invalid', async () => {
+        await {camelName}Business.delete{pascalName}('1' as any).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Delete {camelName} with id not exists', async () => {
+        await {camelName}Business.delete{pascalName}(100).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Delete {camelName} successfully', async () => {
+        const {camelName}Create = generate{pascalName}Data();
+        const {camelName} = await {camelName}Business.create{pascalName}({camelName}Create);
+
+        if ({camelName}) {
+            const result = await {camelName}Business.delete{pascalName}({camelName}.id);
+            expect(result).to.eq(true);
+        }
+    });
+
+    it('Initial {camelName}s with data input invalid', async () => {
+        await {camelName}Business.initial{pascalName}s(undefined as any, true).catch(error => {
+            expect(error.httpCode).to.eq(400);
+        });
+    });
+
+    it('Initial {camelName}s successfull', async () => {
+        const result = await {camelName}Business.initial{pascalName}s(get{pascalName}s(), true);
+        expect(result).to.eq(true);
+    });
+});

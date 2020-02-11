@@ -1,0 +1,21 @@
+import {pascalName} from '../../entities/{pascalName}';
+
+export default class {pascalName}View {
+    id: number;
+    code: number;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+
+    constructor(data: {pascalName}) {
+        this.id = data.id;
+        this.code = data.code;
+        this.name = data.name;
+        this.createdAt = data.createdAt;
+        this.updatedAt = data.updatedAt;
+    }
+
+    static parseArray(list: {pascalName}[]): {pascalName}View[] {
+        return list && Array.isArray(list) ? list.map(item => new {pascalName}View(item)) : [];
+    }
+};

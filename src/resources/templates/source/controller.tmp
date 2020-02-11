@@ -1,0 +1,50 @@
+import { Service, Inject } from 'typedi';
+import { JsonController, Authorized, Param, QueryParam, Body, Get, Post, Put, Delete } from 'routing-controllers';
+import I{pascalName}Business from '../application/businesses/interfaces/I{pascalName}Business';
+import {pascalName}Business from '../application/businesses/{pascalName}Business';
+import {pascalName}Claim from '../resources/permissions/{pascalName}Claim';
+import {pascalName}Create from '../application/models/{camelName}/{pascalName}Create';
+import {pascalName}Update from '../application/models/{camelName}/{pascalName}Update';
+
+@Service()
+@JsonController('/{camelName}s')
+export default class {pascalName}Controller {
+    @Inject(() => {pascalName}Business)
+    private {camelName}Business: I{pascalName}Business;
+
+    @Get('/')
+    @Authorized({pascalName}Claim.GET)
+    find{pascalName}s(@QueryParam('keyword') keyword: string, @QueryParam('skip') skip: number, @QueryParam('limit') limit: number) {
+        return this.{camelName}Business.find{pascalName}s(keyword, skip, limit);
+    }
+
+    @Get('/:id([0-9]+)')
+    @Authorized({pascalName}Claim.GET)
+    get{pascalName}(@Param('id') id: number) {
+        return this.{camelName}Business.get{pascalName}(id);
+    }
+
+    @Get('/{camelName}-by-code')
+    @Authorized({pascalName}Claim.GET)
+    get{pascalName}ByCode(@QueryParam('code') code: number) {
+        return this.{camelName}Business.get{pascalName}ByCode(code);
+    }
+
+    @Post('/')
+    @Authorized({pascalName}Claim.CREATE)
+    create{pascalName}(@Body() data: {pascalName}Create) {
+        return this.{camelName}Business.create{pascalName}(data);
+    }
+
+    @Put('/:id([0-9]+)')
+    @Authorized({pascalName}Claim.UPDATE)
+    update{pascalName}(@Param('id') id: number, @Body() data: {pascalName}Update) {
+        return this.{camelName}Business.update{pascalName}(id, data);
+    }
+
+    @Delete('/:id([0-9]+)')
+    @Authorized({pascalName}Claim.DELETE)
+    delete{pascalName}(@Param('id') id: number) {
+        return this.{camelName}Business.delete{pascalName}(id);
+    }
+};
