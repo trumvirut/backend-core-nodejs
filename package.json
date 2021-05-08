@@ -71,7 +71,7 @@
         "tiny-shortener": "^2.2.3",
         "twilio": "^3.35.1",
         "typedi": "^0.8.0",
-        "typeorm": "^0.2.18",
+        "typeorm": "^0.2.25",
         "typeorm-typedi-extensions": "^0.2.3"
     },
     "devDependencies": {
